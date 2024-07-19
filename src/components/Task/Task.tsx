@@ -4,16 +4,22 @@ import { formatDistanceToNow } from 'date-fns';
 function Task({ task, onChangeComplete, onEditTask, onUpdateDescription, onDeleteTask }: any) {
   const [description, setDescription] = useState(task.description);
 
+  const myTrim = (word: string) => {
+    word.trim();
+    return word.replace(/ +(?= )/g, '');
+  };
+
   const handleSubmit = (newDescription: any) => {
-    if (newDescription.trim() === '') {
+    const result = myTrim(newDescription);
+    if (result === '') {
       return null;
     }
-    onUpdateDescription(task.id, newDescription.trim());
-    setDescription(newDescription.trim());
-    console.log(newDescription.trim());
+    onUpdateDescription(task.id, result);
+    setDescription(result);
   };
 
   const taskClass = `${task.isCompleted ? 'completed' : ''} ${task.isEditing ? 'editing' : ''} `;
+
   return (
     <li className={taskClass}>
       <div className="view">
@@ -47,7 +53,7 @@ function Task({ task, onChangeComplete, onEditTask, onUpdateDescription, onDelet
               setDescription(e.target.value);
             }}
             onBlur={(e) => {
-              if (description.trim() === '') {
+              if (myTrim(description) === '') {
                 e.target.focus();
               }
               handleSubmit(description);
