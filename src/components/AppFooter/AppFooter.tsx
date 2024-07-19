@@ -2,18 +2,15 @@ import React from 'react';
 
 import TasksFilter from '../TasksFilter';
 
-type Props = {
-  tasksLeft: string;
-  clearCompleted: any;
-};
+function Footer({ tasksData, filter, setFilter, setTasks }: any) {
+  const clearCompleted = () => {
+    setTasks(tasksData.filter((task: any) => !task.isCompleted));
+  };
 
-function Footer({ tasksLeft, clearCompleted }: Props) {
   return (
     <footer className="footer">
-      <span className="todo-count">{tasksLeft} items left</span>
-      <ul className="filters">
-        <TasksFilter />
-      </ul>
+      <span className="todo-count">{tasksData.filter((task: any) => !task.isCompleted).length} items left </span>
+      <TasksFilter filter={filter} setFilter={setFilter} />
       <button type="button" className="clear-completed" onClick={clearCompleted}>
         Clear completed
       </button>

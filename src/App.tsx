@@ -1,24 +1,56 @@
-import React from 'react';
+// src/App.tsx
+import React, { useState } from 'react';
 
 import TodoList from './components/TodoList';
-import AppHeader from './components/AppHeader';
-import NewTaskForm from './components/NewTaskForm';
 import AppFooter from './components/AppFooter';
+import './index.css';
+import AppHeader from './components/AppHeader';
 
 function App() {
-  const todoData = [
-    { editing: false, created: new Date(), textContent: 'Some label', important: false, id: 1 },
-    { editing: false, created: new Date(), textContent: 'Some label 1', important: false, id: 2 },
-    { editing: false, created: new Date(), textContent: 'Some label 2', important: true, id: 3 },
-  ];
+  const [tasks, setTasks] = useState([
+    { id: 0, description: 'Completed task', isCompleted: true, isEditing: false, created: new Date() },
+    { id: 1, description: 'Editing task', isCompleted: false, isEditing: false, created: new Date() },
+  ]);
+
+  const [inputText, setInputText] = useState('');
+
+  const [filter, setFilter] = useState('All');
+
+  const onChangeComplete = (id: number) => {
+    setTasks(tasks.map((task) => (task.id === id ? { ...task, isCompleted: !task.isCompleted } : task)));
+  };
+
+  const onDeleteTask = (id: number) => {
+    console.log('task deleted');
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  const createNewTask = (description: string) => {
+    setTasks([
+      ...tasks,
+      { id: tasks.length + 100, description, isCompleted: false, isEditing: false, created: new Date() },
+    ]);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === 'Active') return !task.isCompleted;
+    if (filter === 'Completed') return task.isCompleted;
+    return true;
+  });
 
   return (
-    <div>
-      <AppHeader />
-      <NewTaskForm textContent="" />
-      <TodoList todos={todoData} />
-      <AppFooter tasksLeft="" clearCompleted={undefined} />
-    </div>
+    <section className="todoapp">
+      <AppHeader createNewTask={createNewTask} setInputText={setInputText} inputText={inputText} />
+      <section className="main">
+        <TodoList
+          setTasks={setTasks}
+          tasksData={filteredTasks}
+          onChangeComplete={onChangeComplete}
+          onDeleteTask={onDeleteTask}
+        />
+        <AppFooter tasksData={tasks} filter={filter} setFilter={setFilter} setTasks={setTasks} />
+      </section>
+    </section>
   );
 }
 

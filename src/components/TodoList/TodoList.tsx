@@ -1,27 +1,31 @@
 import React from 'react';
 
-import TodoListItem from '../TodoListItem';
 import './TodoList.css';
+import Task from '../Task/Task';
 
-type Props = {
-  todos: Array<any>;
-};
+function TodoList({ setTasks, tasksData, onChangeComplete, onDeleteTask }: any) {
+  const onEditTask = (id: number) => {
+    setTasks(tasksData.map((task: any) => (task.id === id ? { ...task, isEditing: true } : task)));
+  };
 
-function TodoList({ todos }: Props) {
-  const elements = todos.map((todo) => {
+  const onUpdateDescription = (id: number, description: string) => {
+    setTasks(tasksData.map((task: any) => (task.id === id ? { ...task, description, isEditing: false } : task)));
+  };
+
+  const elements = tasksData.map((task: any) => {
     return (
-      <li className="list-group-item todo-list" key={todo.key}>
-        <TodoListItem
-          editing={todo.editing}
-          created={todo.created}
-          textContent={todo.textContent}
-          important={todo.important}
-        />
-      </li>
+      <Task
+        key={task.id}
+        task={task}
+        onEditTask={onEditTask}
+        onUpdateDescription={onUpdateDescription}
+        onDeleteTask={onDeleteTask}
+        onChangeComplete={onChangeComplete}
+      />
     );
   });
 
-  return <ul className="list-group">{elements}</ul>;
+  return <ul className="todo-list">{elements}</ul>;
 }
 
 export default TodoList;

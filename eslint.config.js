@@ -125,8 +125,12 @@ export default [
       'react/prop-types': 0,
       'react/require-default-props': 0,
 
+      'consistent-return': 0,
+
       'jsx-a11y/label-has-associated-control': 0,
       'jsx-a11y/control-has-associated-label': 0,
+      'jsx-a11y/no-autofocus': 0,
+
       '@typescript-eslint/no-explicit-any': 0,
     },
   },
